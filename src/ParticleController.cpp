@@ -28,9 +28,9 @@ ParticleController::ParticleController(int res) {
 	}
 }
 
-void ParticleController::update() {
+void ParticleController::update(bool colored, bool marked, bool ordered) {
 	for(list<Particle>::iterator p = mParticles.begin(); p != mParticles.end(); ++p) {
-		p->update();
+		p->update(colored, marked, ordered);
 	}
 }
 
@@ -40,22 +40,8 @@ void ParticleController::draw() {
 	}
 }
 
-void ParticleController::addParticles(int amt) {
-	for(int i=0; i<amt; i++) {
-		float x = Rand::randFloat(app::getWindowWidth());
-		float y = Rand::randFloat(app::getWindowHeight());
-		mParticles.push_back(Particle(Vec2f(x, y)));
-	}
-}
-
 void ParticleController::addParticle(int xi, int yi, int res) {
     float x = (xi + 0.5f) * (float)res;
     float y = (yi + 0.5f) * (float)res;
     mParticles.push_back(Particle(Vec2f(x, y)));
-}
-
-void ParticleController::removeParticles(int amt) {
-	for(int i=0; i<amt; i++) {
-		mParticles.pop_back();
-	}
 }

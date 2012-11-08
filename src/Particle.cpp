@@ -26,9 +26,9 @@ Particle::Particle(Vec2f loc) {
 	mRadius = Rand::randFloat(1.0f, 5.0f);
 }
 
-void Particle::update(bool color, bool marked, bool ordered) {
+void Particle::update(bool colored, bool marked, bool ordered) {
 	// update color if needed
-	if(color) {
+	if(colored) {
 		rMod += Rand::randFloat(-0.1f, 0.1f);
 		gMod += Rand::randFloat(-0.1f, 0.1f);
 		bMod += Rand::randFloat(-0.1f, 0.1f);
@@ -43,19 +43,19 @@ void Particle::update(bool color, bool marked, bool ordered) {
 		mColor = Color(cMod, cMod, cMod);
 	}
 	
+	// update mark if needed
+	if(marked) {
+		mColor = Color(1.0f, 0.0f, 0.0f);
+	}
+	else {
+	}
+
 	// update order if needed
 	if(ordered) {
 	}
 	else {
 		mRadius += Rand::randFloat(-0.5f, 0.5f);
 		boundFloat(mRadius, false);
-	}
-
-	// update mark if needed
-	if(marked) {
-		mColor = Color(1.0f, 0.0f, 0.0f);
-	}
-	else {
 	}
 }
 
@@ -64,10 +64,10 @@ void Particle::draw() {
 	gl::drawSolidCircle(mLoc, mRadius);
 }
 
-void Particle::boundFloat(float i, bool c) {
+void Particle::boundFloat(float& i, bool colored) {
 	if(i <= 0.0f) i = 0.0f;
-	else if(c && i >= 1.0f) i = 1.0f;
-	else if(!c && i >= 5.0f) i = 5.0f;
+	else if(colored && i >= 1.0f) i = 1.0f;
+	else if(!colored && i >= 5.0f) i = 5.0f;
 }
 
 /*

@@ -2,7 +2,6 @@
 #include "cinder/gl/gl.h"
 #include "ParticleController.h"
 
-#define TOTAL_PARTICLES 4800
 #define RESOLUTION 10
 
 using namespace ci;
@@ -18,7 +17,11 @@ class matrixP : public AppBasic {
 	void keyDown(KeyEvent event);
 	
 	ParticleController mParticleController;
-	Boolean mRenderParticles;
+	
+	bool mRenderParticles;
+	bool mRenderColor;
+	bool mRenderMarked;
+	bool mRenderOrdered;
 };
 
 void matrixP::prepareSettings(Settings *settings){
@@ -27,31 +30,27 @@ void matrixP::prepareSettings(Settings *settings){
 }
 
 void matrixP::setup() {
-//	mParticleController.addParticles(5000);
-
 	mParticleController = ParticleController(RESOLUTION);
 	mRenderParticles = TRUE;
+	mRenderColor = FALSE;
+	mRenderMarked = FALSE;
+	mRenderOrdered = FALSE;
 }
 
 void matrixP::update() {
-	mParticleController.update();
+	mParticleController.update(mRenderColor, mRenderMarked, mRenderOrdered);
 }
 
 void matrixP::draw() {
-//	float gray = sin(getElapsedSeconds()) * 0.5f + 0.3f;
-//	gl::clear(Color(gray, gray, gray), true);
-//	float x = cos(getElapsedSeconds()) * 100.0f;
-//	float y = sin(getElapsedSeconds()) * 100.0f;
-//	gl::drawSolidCircle(Vec2f(x, y) + getWindowSize()/2, abs(x));
 	gl::clear();
-	if(mRenderParticles)
-		mParticleController.draw();
+	if(mRenderParticles) mParticleController.draw();
 }
 
 void matrixP::keyDown(KeyEvent event) {
-	if(event.getChar() == '1'){
-        mRenderParticles = !mRenderParticles;
-    }
+	if(event.getChar() == '1') mRenderParticles = !mRenderParticles;
+	if(event.getChar() == '2') mRenderColor = !mRenderColor;
+	if(event.getChar() == '3') mRenderMarked = !mRenderMarked;
+	if(event.getChar() == '4') mRenderOrdered = !mRenderOrdered;
 }
 
 CINDER_APP_BASIC(matrixP, RendererGl)

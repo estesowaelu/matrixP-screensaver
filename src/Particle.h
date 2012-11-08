@@ -6,10 +6,8 @@
 //
 //
 
-#ifndef __matrixP__Particle__
-#define __matrixP__Particle__
-
 #pragma once
+
 #include "cinder/Vector.h"
 #include "cinder/Color.h"
 #include <vector>
@@ -19,9 +17,9 @@ public:
 	Particle();
 	Particle(ci::Vec2f);
 
-	void update(bool, bool, bool);
+	void update(bool colored, bool marked, bool ordered);
 	void draw();
-	void boundFloat(float, bool);
+	void boundFloat(float& i, bool colored);
 	
 	ci::Vec2f	mLoc;
 	
@@ -34,5 +32,3 @@ public:
 	ci::Color	mColor;
 
 };
-
-#endif /* defined(__matrixP__Particle__) */
