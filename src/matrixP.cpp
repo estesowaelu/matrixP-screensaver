@@ -2,7 +2,9 @@
 #include "cinder/gl/gl.h"
 #include "ParticleController.h"
 
-#define RESOLUTION 10
+#define RESOLUTION 15
+#define WIDTH 640
+#define HEIGHT 761
 
 using namespace ci;
 using namespace ci::app;
@@ -15,30 +17,33 @@ class matrixP : public AppBasic {
 	void update();
 	void draw();
 	void keyDown(KeyEvent event);
+	void mouseMove(MouseEvent event);
+	void mouseDrag(MouseEvent event);
 	
 	ParticleController mParticleController;
 	
+	Vec2i mMouseLoc;
+	
 	bool mRenderParticles;
-	bool mRenderColor;
-	bool mRenderMarked;
+	int mRenderColor;
 	bool mRenderOrdered;
 };
 
 void matrixP::prepareSettings(Settings *settings){
-    settings->setWindowSize(640, 761);
+    settings->setWindowSize(WIDTH, HEIGHT);
     settings->setFrameRate(60.0f);
 }
 
 void matrixP::setup() {
 	mParticleController = ParticleController(RESOLUTION);
+	mMouseLoc = Vec2i(0, 0);
 	mRenderParticles = TRUE;
-	mRenderColor = FALSE;
-	mRenderMarked = FALSE;
+	mRenderColor = 1;
 	mRenderOrdered = FALSE;
 }
 
 void matrixP::update() {
-	mParticleController.update(mRenderColor, mRenderMarked, mRenderOrdered);
+	mParticleController.update(mRenderColor, mRenderOrdered, mMouseLoc);
 }
 
 void matrixP::draw() {
@@ -47,10 +52,24 @@ void matrixP::draw() {
 }
 
 void matrixP::keyDown(KeyEvent event) {
-	if(event.getChar() == '1') mRenderParticles = !mRenderParticles;
-	if(event.getChar() == '2') mRenderColor = !mRenderColor;
-	if(event.getChar() == '3') mRenderMarked = !mRenderMarked;
+	// show-hide particles
+	if(event.getChar() == '0') mRenderParticles = !mRenderParticles;
+	// greyscale
+	if(event.getChar() == '1') mRenderColor = 1;
+	// color
+	if(event.getChar() == '2') mRenderColor = 2;
+	// gradient
+	if(event.getChar() == '3') mRenderColor = 3;
+	// follow-decay
 	if(event.getChar() == '4') mRenderOrdered = !mRenderOrdered;
+}
+
+void matrixP::mouseMove(MouseEvent event) {
+	mMouseLoc = event.getPos();
+}
+
+void matrixP::mouseDrag(MouseEvent event) {
+	mouseMove(event);
 }
 
 CINDER_APP_BASIC(matrixP, RendererGl)

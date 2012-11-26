@@ -15,9 +15,11 @@ class ParticleController {
 public:
 	ParticleController();
 	ParticleController(int res);
-	void update(bool colored, bool marked, bool ordered);
+	void update(int color, bool ordered, const ci::Vec2i &mouseLoc);
 	void draw();
 	void addParticle(int xi, int yi, int res);
+	void addParticles(int amt, int res);
+	void removeParticles(int amt);
 	
 	std::list<Particle>	mParticles;
 	
