@@ -37,9 +37,7 @@ void Particle::update(int color, bool ordered, const Vec2i &mouseLoc) {
 	mDirToCursor		= mouseLoc - mLoc;
 	float distToCursor	= mDirToCursor.length();
 	mDirToCursor.normalize();
-	float mDTCNxC = pow(mDirToCursor.x, 3.0f);
-	float mDTCNyC = pow(mDirToCursor.y, 3.0f);
-	float hypotDCN = hypotf(mDTCNxC, mDTCNyC);
+	float hypotDCN = hypotf(pow(mDirToCursor.x, 3.0f), pow(mDirToCursor.y, 3.0f));
 
 	// update color if needed
 	updateColor(color, hypotDCN);
