@@ -5,10 +5,10 @@
 #include "cinder/CinderMath.h"
 
 #define RESOLUTION 15
-#define WIDTH 640
-#define HEIGHT 761
-//#define WIDTH 1440
-//#define HEIGHT 900
+//#define WIDTH 640
+//#define HEIGHT 761
+#define WIDTH 1440
+#define HEIGHT 900
 
 using namespace ci;
 using namespace ci::app;
@@ -54,7 +54,7 @@ void matrixP::setup() {
 	mRenderAuto = FALSE;
 	framecounter = 0;
 	typecounter = 1;
-//	app::setFullScreen();
+	app::setFullScreen();
 }
 
 void matrixP::update() {
