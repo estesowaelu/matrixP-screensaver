@@ -5,10 +5,13 @@
 #include "cinder/CinderMath.h"
 
 #define RESOLUTION 15
-//#define WIDTH 640
-//#define HEIGHT 761
-#define WIDTH 1440
-#define HEIGHT 900
+#define WIDTH 640
+#define HEIGHT 761
+//#define WIDTH 720
+//#define HEIGHT 450
+//#define WIDTH 1440
+//#define HEIGHT 900
+#define CYCLELIMIT 3600
 
 using namespace ci;
 using namespace ci::app;
@@ -29,6 +32,10 @@ class matrixP : public AppBasic {
 	
 	Vec2i mMouseLoc;
 	Vec2f mGhostMouse;
+	Vec2f mGhostGoal;
+	
+	float mStepX;
+	float mStepY;
 	
 	int framecounter;
 	int typecounter;
@@ -54,26 +61,30 @@ void matrixP::setup() {
 	mRenderAuto = FALSE;
 	framecounter = 0;
 	typecounter = 1;
-	app::setFullScreen();
+	mGhostGoal.x = Rand::randFloat(0.0f, getWindowWidth() - 1.0f);
+	mGhostGoal.y = Rand::randFloat(0.0f, getWindowHeight() - 1.0f);
+//	app::setFullScreen();
 }
 
 void matrixP::update() {
 	if(mRenderAuto) {
 		framecounter++;
-		if(framecounter==18000) {
-			framecounter = 0;
+		if(framecounter==CYCLELIMIT) {
 			typecounter++;
+			mGhostGoal.x = Rand::randFloat(0.0f, getWindowWidth() - 1.0f);
+			mGhostGoal.y = Rand::randFloat(0.0f, getWindowHeight() - 1.0f);
+			mStepX = (mGhostGoal.x - mGhostMouse.x)/CYCLELIMIT;
+			mStepY = (mGhostGoal.y - mGhostMouse.y)/CYCLELIMIT;
+			framecounter = 0;
 		}
 		if(typecounter==4) {
-			typecounter = 1;
 			mRenderOrdered = !mRenderOrdered;
+			typecounter = 1;
 		}
 		mRenderColor = typecounter;
 		
-		mGhostMouse.x += Rand::randFloat(-2.0f, 2.0f);
-		mGhostMouse.y += Rand::randFloat(-2.0f, 2.0f);
-		mGhostMouse.x = constrain(mGhostMouse.x, 0.0f, getWindowWidth() - 1.0f);
-		mGhostMouse.y = constrain(mGhostMouse.y, 0.0f, getWindowHeight() - 1.0f);
+		mGhostMouse.x += mStepX;
+		mGhostMouse.y += mStepY;
 
 		mParticleController.update(mRenderColor, mRenderOrdered, mGhostMouse);
 	}
@@ -85,7 +96,7 @@ void matrixP::printStats() {
 	app::console() << "===========================" << std::endl;
 	if(mRenderAuto) {
 		app::console() << "AutoRender ON" << std::endl;
-		app::console() << "Frame " << framecounter << "/18000" << std::endl;
+		app::console() << "Frame " << framecounter << "/" << CYCLELIMIT << std::endl;
 		app::console() << "Type " << typecounter << "/3" << std::endl;
 		app::console() << "GhostMouse: " << mGhostMouse << std::endl;
 	}
